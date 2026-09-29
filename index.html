@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurevél | Reveal Your Natural Radiance</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#FFFFF0',
+                        cream: '#FFFDD0',
+                        beige: '#F5F5DC',
+                        champagne: '#F7E7CE',
+                        gold: '#C5A059',
+                        'gold-dark': '#A68545',
+                        'soft-black': '#2C2C2C',
+                        'soft-gray': '#F9F9F7'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F9F9F7;
+            color: #2C2C2C;
+            scroll-behavior: smooth;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .slide-up {
+            animation: slideUp 0.6s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #C5A059 0%, #E5C585 50%, #C5A059 100%);
+        }
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Chatbot Animations */
+        .chat-message {
+            animation: slideUp 0.3s ease-out;
+        }
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F9F9F7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C5A059;
+            border-radius: 4px;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            bottom: 0;
+            width: 2px;
+            background-color: #E5E7EB;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-ivory/95 backdrop-blur-md border-b border-gold/20 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center cursor-pointer" onclick="router.navigate('home')">
+                    <span class="serif-font text-3xl font-bold text-soft-black tracking-wide">Aurevél</span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a onclick="router.navigate('home')" class="text-sm uppercase tracking-widest hover:text-gold cursor-pointer transition">Home</a>
+                    <a onclick="router.navigate('shop')" class="text-sm uppercase tracking-widest hover:text-gold cursor-pointer transition">Shop</a>
+                    <a onclick="router.navigate('about')" class="text-sm uppercase tracking-widest hover:text-gold cursor-pointer transition">About</a>
+                    <a onclick="router.navigate('ingredients')" class="text-sm uppercase tracking-widest hover:text-gold cursor-pointer transition">Ingredients</a>
+                    <a onclick="openQuiz()" class="text-sm uppercase tracking-widest text-gold font-semibold cursor-pointer hover:text-gold-dark transition">Find Your Serum</a>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button onclick="router.navigate('shop')" class="hover:text-gold transition"><i class="fas fa-search text-lg"></i></button>
+                    <button onclick="router.navigate('track')" class="hover:text-gold transition hidden sm:block"><i class="fas fa-box text-lg"></i></button>
+                    <button onclick="router.navigate('cart')" class="relative hover:text-gold transition">
+                        <i class="fas fa-shopping-bag text-lg"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center opacity-0 transition-opacity">0</span>
+                    </button>
+                    <button onclick="toggleChat()" class="hover:text-gold transition"><i class="fas fa-comment-dots text-lg"></i></button>
+                    <button class="md:hidden text-2xl" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-ivory border-t border-gold/20">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a onclick="router.navigate('home'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold cursor-pointer">Home</a>
+                <a onclick="router.navigate('shop'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold cursor-pointer">Shop</a>
+                <a onclick="router.navigate('about'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold cursor-pointer">About</a>
+                <a onclick="openQuiz(); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gold cursor-pointer">Find Your Serum</a>
+                <a onclick="router.navigate('contact'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold cursor-pointer">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="app" class="min-h-screen">
+        <!-- Dynamic content injected here -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-soft-black text-ivory pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <span class="serif-font text-3xl font-bold text-gold">Aurevél</span>
+                    <p class="mt-4 text-sm text-gray-400 leading-relaxed">Reveal Your Natural Radiance. Luxury skincare formulas designed for your everyday ritual.</p>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-gold transition"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-gold transition"><i class="fab fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-gold transition"><i class="fab fa-tiktok text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-gold transition"><i class="fab fa-whatsapp text-xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="serif-font text-lg mb-4 text-gold">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a onclick="router.navigate('shop')" class="hover:text-white cursor-pointer transition">Shop Collection</a></li>
+                        <li><a onclick="router.navigate('about')" class="hover:text-white cursor-pointer transition">About Aurevél</a></li>
+                        <li><a onclick="router.navigate('ingredients')" class="hover:text-white cursor-pointer transition">Ingredients</a></li>
+                        <li><a onclick="openQuiz()" class="hover:text-white cursor-pointer transition">Find Your Serum</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="serif-font text-lg mb-4 text-gold">Customer Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a onclick="router.navigate('track')" class="hover:text-white cursor-pointer transition">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white cursor-pointer transition">Shipping & Delivery</a></li>
+                        <li><a href="#" class="hover:text-white cursor-pointer transition">Returns & Refunds</a></li>
+                        <li><a onclick="router.navigate('contact')" class="hover:text-white cursor-pointer transition">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="serif-font text-lg mb-4 text-gold">Join the Aurevél Glow List</h4>
+                    <p class="text-sm text-gray-400 mb-4">Get skincare tips, new product announcements and exclusive offers.</p>
+                    <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing!');" class="flex flex-col space-y-2">
+                        <input type="email" placeholder="Your email address" required class="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:border-gold text-sm">
+                        <button type="submit" class="bg-gold text-white px-4 py-2 rounded hover:bg-gold-dark transition text-sm font-semibold uppercase tracking-wider">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+                <p>&copy; 2026 Aurevél Skincare. All rights reserved.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white">Privacy Policy</a>
+                    <a href="#" class="hover:text-white">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot: Auri -->
+    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <!-- Chat Window -->
+        <div id="chat-window" class="hidden bg-white w-80 sm:w-96 h-[500px] rounded-2xl shadow-2xl border border-gold/20 flex flex-col overflow-hidden mb-4 slide-up">
+            <div class="bg-gold p-4 flex justify-between items-center text-white">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">✨</div>
+                    <div>
+                        <h4 class="font-semibold text-sm">Auri</h4>
+                        <p class="text-xs opacity-90">Aurevél Beauty Assistant</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="hover:text-gray-200"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-soft-gray">
+                <!-- Messages injected here -->
+            </div>
+
+            <div class="p-3 bg-white border-t border-gray-100">
+                <div id="quick-replies" class="flex flex-wrap gap-2 mb-3">
+                    <!-- Quick replies injected here -->
+                </div>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="chat-input" placeholder="Ask Auri anything..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold" onkeypress="if(event.key==='Enter') sendChatMessage()">
+                    <button onclick="sendChatMessage()" class="w-10 h-10 bg-gold text-white rounded-full flex items-center justify-center hover:bg-gold-dark transition">
+                        <i class="fas fa-paper-plane text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button onclick="toggleChat()" class="gold-gradient text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform duration-300 group">
+            <span class="absolute right-16 bg-soft-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Chat with Auri</span>
+            <i class="fas fa-comment-dots text-2xl"></i>
+        </button>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="fixed inset-0 z-[60] hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto slide-up">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="serif-font text-2xl text-soft-black">Find Your Serum ✨</h3>
+                <button onclick="closeQuiz()" class="text-gray-400 hover:text-soft-black"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div id="quiz-content" class="p-6">
+                <!-- Quiz steps injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-soft-black text-white px-6 py-3 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-[70] flex items-center space-x-2">
+        <i class="fas fa-check-circle text-gold"></i>
+        <span id="toast-message" class="text-sm font-medium">Item added to cart</span>
+    </div>
+
+    <script>
+        // ==========================================
+        // DATA & STATE MANAGEMENT
+        // ==========================================
+        const products = [
+            {
+                id: 1,
+                name: "Aurevél Lumière Glow Serum",
+                price: 3499,
+                image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&q=80&w=600",
+                description: "A luxurious glow-enhancing serum that illuminates the skin from within. Formulated to smooth texture and reveal your natural radiance.",
+                ingredients: ["Squalane", "Vitamin E", "Light-reflecting minerals", "Rosehip Oil"],
+                benefits: "Enhances natural radiance, smooths skin texture, provides lightweight moisture.",
+                skinType: ["Normal", "Dry"],
+                size: "30ml",
+                reviews: [{name: "Ayesha K.", rating: 5, text: "Absolutely love the glow! My skin feels so soft."}]
+            },
+            {
+                id: 2,
+                name: "Aurevél Éclat Vitamin C Serum",
+                price: 3799,
+                image: "https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?auto=format&fit=crop&q=80&w=600",
+                description: "A potent, brightening serum designed to target dullness and uneven skin tone for a luminous complexion.",
+                ingredients: ["15% L-Ascorbic Acid", "Ferulic Acid", "Vitamin E", "Hyaluronic Acid"],
+                benefits: "Brightens skin, fades dark spots, protects against environmental stressors.",
+                skinType: ["All Skin Types"],
+                size: "30ml",
+                reviews: [{name: "Sana M.", rating: 5, text: "Noticed a difference in my dark spots within 3 weeks."}]
+            },
+            {
+                id: 3,
+                name: "Aurevél Hyalune Hydration Serum",
+                price: 3299,
+                image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600",
+                description: "An intense hydration boost that plumps and quenches thirsty skin, leaving it dewy and supple.",
+                ingredients: ["Multi-weight Hyaluronic Acid", "Vitamin B5", "Glycerin", "Aloe Vera"],
+                benefits: "Deep hydration, plumps fine lines, strengthens skin barrier.",
+                skinType: ["Dry", "Dehydrated", "Sensitive"],
+                size: "30ml",
+                reviews: [{name: "Zara T.", rating: 5, text: "Perfect for Karachi's weather. Keeps my skin hydrated all day."}]
+            },
+            {
+                id: 4,
+                name: "Aurevél Nuit Renewal Serum",
+                price: 4199,
+                image: "https://images.unsplash.com/photo-1570194065650-d99fb4b38b15?auto=format&fit=crop&q=80&w=600",
+                description: "A rich, restorative night serum that works while you sleep to renew and rejuvenate the skin.",
+                ingredients: ["Bakuchiol", "Peptides", "Ceramides", "Jojoba Oil"],
+                benefits: "Promotes cell renewal, improves firmness, reduces appearance of fine lines.",
+                skinType: ["Mature", "Normal", "Dry"],
+                size: "30ml",
+                reviews: [{name: "Fatima R.", rating: 4, text: "Woke up with very plump skin. Love the texture."}]
+            },
+            {
+                id: 5,
+                name: "Aurevél Pure Balance Serum",
+                price: 3599,
+                image: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=600",
+                description: "A clarifying serum that regulates sebum production and minimizes the appearance of pores for a balanced complexion.",
+                ingredients: ["10% Niacinamide", "Zinc PCA", "Willow Bark Extract", "Green Tea"],
+                benefits: "Controls oil, minimizes pores, calms redness and blemishes.",
+                skinType: ["Oily", "Combination", "Acne-Prone"],
+                size: "30ml",
+                reviews: [{name: "Hira L.", rating: 5, text: "Finally a serum that controls my oily T-zone without drying it out."}]
+            }
+        ];
+
+        const store = {
+            cart: JSON.parse(localStorage.getItem('aurevel_cart')) || [],
+            orders: JSON.parse(localStorage.getItem('aurevel_orders')) || [],
+            
+            saveCart() {
+                localStorage.setItem('aurevel_cart', JSON.stringify(this.cart));
+                updateCartCount();
+            },
+            
+            saveOrders() {
+                localStorage.setItem('aurevel_orders', JSON.stringify(this.orders));
+            },
+
+            addToCart(productId, qty = 1) {
+                const product = products.find(p => p.id === productId);
+                const existing = this.cart.find(item => item.id === productId);
+                if (existing) {
+                    existing.qty += qty;
+                } else {
+                    this.cart.push({ ...product, qty });
+                }
+                this.saveCart();
+                showToast(`${product.name} added to cart`);
+            },
+
+            removeFromCart(productId) {
+                this.cart = this.cart.filter(item => item.id !== productId);
+                this.saveCart();
+                router.navigate('cart');
+            },
+
+            updateQty(productId, qty) {
+                const item = this.cart.find(i => i.id === productId);
+                if (item) {
+                    item.qty = parseInt(qty);
+                    if (item.qty <= 0) this.removeFromCart(productId);
+                    else this.saveCart();
+                }
+                if (document.getElementById('cart-page')) router.navigate('cart');
+            },
+
+            clearCart() {
+                this.cart = [];
+                this.saveCart();
+            },
+
+            placeOrder(orderData) {
+                const orderId = 'AUR-' + Date.now().toString().slice(-6);
+                const order = {
+                    id: orderId,
+                    date: new Date().toLocaleDateString(),
+                    ...orderData,
+                    status: 'Pending',
+                    items: [...this.cart]
+                };
+                this.orders.push(order);
+                this.saveOrders();
+                this.clearCart();
+                return orderId;
+            }
+        };
+
+        function updateCartCount() {
+            const count = store.cart.reduce((sum, item) => sum + item.qty, 0);
+            const badge = document.getElementById('cart-count');
+            badge.innerText = count;
+            badge.style.opacity = count > 0 ? '1' : '0';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // ==========================================
+        // ROUTER & VIEWS
+        // ==========================================
+        const router = {
+            currentPage: 'home',
+            
+            navigate(page, params = {}) {
+                this.currentPage = page;
+                window.scrollTo(0, 0);
+                const app = document.getElementById('app');
+                app.innerHTML = '';
+                
+                switch(page) {
+                    case 'home': renderHome(app); break;
+                    case 'shop': renderShop(app); break;
+                    case 'product': renderProduct(app, params.id); break;
+                    case 'cart': renderCart(app); break;
+                    case 'checkout': renderCheckout(app); break;
+                    case 'confirmation': renderConfirmation(app, params.id); break;
+                    case 'track': renderTrack(app); break;
+                    case 'about': renderAbout(app); break;
+                    case 'ingredients': renderIngredients(app); break;
+                    case 'contact': renderContact(app); break;
+                    default: renderHome(app);
+                }
+            }
+        };
+
+        // --- VIEW RENDERERS ---
+        function renderHome(container) {
+            container.innerHTML = `
+                <div class="fade-in">
+                    <!-- Hero Section -->
+                    <section class="relative h-[85vh] flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 z-0">
+                            <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=1920" class="w-full h-full object-cover opacity-90" alt="Luxury Skincare">
+                            <div class="absolute inset-0 bg-gradient-to-r from-ivory/90 via-ivory/70 to-transparent"></div>
+                        </div>
+                        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                            <div class="max-w-xl slide-up">
+                                <p class="text-gold uppercase tracking-[0.3em] text-sm font-semibold mb-4">Premium Skincare</p>
+                                <h1 class="serif-font text-5xl md:text-7xl font-bold text-soft-black mb-6 leading-tight">Reveal Your <br><span class="text-gold italic">Natural Radiance</span></h1>
+                                <p class="text-gray-600 text-lg mb-8 leading-relaxed">Discover luxurious serum formulas designed to become a beautiful part of your everyday skincare ritual.</p>
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <button onclick="router.navigate('shop')" class="bg-soft-black text-white px-8 py-4 rounded-sm hover:bg-gold transition duration-300 uppercase tracking-widest text-sm font-semibold">Shop Collection</button>
+                                    <button onclick="openQuiz()" class="border border-soft-black text-soft-black px-8 py-4 rounded-sm hover:bg-soft-black hover:text-white transition duration-300 uppercase tracking-widest text-sm font-semibold">Find My Serum</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Featured Collection -->
+                    <section class="py-20 bg-soft-gray">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="text-center mb-16">
+                                <h2 class="serif-font text-4xl font-bold text-soft-black mb-4">The Serum Collection</h2>
+                                <div class="w-24 h-1 bg-gold mx-auto"></div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                ${products.slice(0, 3).map(p => createProductCard(p)).join('')}
+                            </div>
+                            <div class="text-center mt-12">
+                                <button onclick="router.navigate('shop')" class="border-b-2 border-gold text-soft-black pb-1 hover:text-gold transition uppercase tracking-widest text-sm font-semibold">View All Products</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Brand Promise -->
+                    <section class="py-20 bg-ivory">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                                <div class="p-6">
+                                    <i class="fas fa-leaf text-4xl text-gold mb-4"></i>
+                                    <h3 class="serif-font text-xl font-semibold mb-2">Clean Ingredients</h3>
+                                    <p class="text-gray-600 text-sm">Formulated with high-quality, ethically sourced botanical extracts and proven actives.</p>
+                                </div>
+                                <div class="p-6">
+                                    <i class="fas fa-gem text-4xl text-gold mb-4"></i>
+                                    <h3 class="serif-font text-xl font-semibold mb-2">Luxury Experience</h3>
+                                    <p class="text-gray-600 text-sm">Elegant textures and subtle fragrances that transform your daily routine into a ritual.</p>
+                                </div>
+                                <div class="p-6">
+                                    <i class="fas fa-shipping-fast text-4xl text-gold mb-4"></i>
+                                    <h3 class="serif-font text-xl font-semibold mb-2">Pakistan Wide Delivery</h3>
+                                    <p class="text-gray-600 text-sm">Secure packaging and reliable delivery to your doorstep anywhere in Pakistan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        function renderShop(container) {
+            container.innerHTML = `
+                <div class="fade-in py-12 min-h-screen">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-12">
+                            <h1 class="serif-font text-4xl font-bold text-soft-black mb-4">Shop All Serums</h1>
+                            <p class="text-gray-600">Curated formulas for every skin concern.</p>
+                        </div>
+                        
+                        <!-- Filters -->
+                        <div class="flex flex-wrap gap-4 justify-center mb-12">
+                            <button onclick="filterShop('all')" class="px-6 py-2 rounded-full border border-gold bg-gold text-white text-sm hover:bg-gold-dark transition">All</button>
+                            <button onclick="filterShop('Dry')" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 text-sm hover:border-gold hover:text-gold transition">Dry Skin</button>
+                            <button onclick="filterShop('Oily')" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 text-sm hover:border-gold hover:text-gold transition">Oily Skin</button>
+                            <button onclick="filterShop('Normal')" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 text-sm hover:border-gold hover:text-gold transition">Normal Skin</button>
+                        </div>
+
+                        <div id="shop-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            ${products.map(p => createProductCard(p)).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterShop(type) {
+            const grid = document.getElementById('shop-grid');
+            const filtered = type === 'all' ? products : products.filter(p => p.skinType.includes(type) || p.skinType.includes('All Skin Types'));
+            grid.innerHTML = filtered.map(p => createProductCard(p)).join('');
+        }
+
+        function createProductCard(p) {
+            return `
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-xl transition duration-300 overflow-hidden group">
+                    <div class="relative overflow-hidden h-80 bg-gray-100 cursor-pointer" onclick="router.navigate('product', {id: ${p.id}})">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                        <button class="absolute bottom-4 right-4 bg-white text-soft-black w-10 h-10 rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-gold hover:text-white" onclick="event.stopPropagation(); store.addToCart(${p.id})">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="serif-font text-lg font-semibold text-soft-black cursor-pointer hover:text-gold transition" onclick="router.navigate('product', {id: ${p.id}})">${p.name}</h3>
+                            <span class="text-gold font-bold">₨${p.price.toLocaleString()}</span>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">${p.description}</p>
+                        <div class="flex items-center text-xs text-gray-400 mb-4">
+                            <i class="fas fa-tint mr-2"></i> ${p.skinType.join(', ')}
+                        </div>
+                        <button onclick="router.navigate('product', {id: ${p.id}})" class="w-full border border-soft-black text-soft-black py-2 rounded-sm hover:bg-soft-black hover:text-white transition uppercase text-xs tracking-widest font-semibold">View Details</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProduct(container, id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return router.navigate('shop');
+            
+            container.innerHTML = `
+                <div class="fade-in py-12 min-h-screen bg-soft-gray">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <button onclick="router.navigate('shop')" class="mb-6 text-gray-500 hover:text-gold flex items-center gap-2"><i class="fas fa-arrow-left"></i> Back to Shop</button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-8 rounded-2xl shadow-sm">
+                            <div class="rounded-xl overflow-hidden bg-gray-100">
+                                <img src="${p.image}" class="w-full h-full object-cover" alt="${p.name}">
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <div class="mb-2">
+                                    <span class="bg-gold/10 text-gold px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">${p.size}</span>
+                                </div>
+                                <h1 class="serif-font text-4xl font-bold text-soft-black mb-4">${p.name}</h1>
+                                <div class="flex items-center mb-6">
+                                    <div class="flex text-gold text-sm mr-2">
+                                        ${'<i class="fas fa-star"></i>'.repeat(5)}
+                                    </div>
+                                    <span class="text-gray-500 text-sm">(${p.reviews.length} Reviews)</span>
+                                </div>
+                                <p class="text-3xl font-bold text-soft-black mb-6">₨${p.price.toLocaleString()}</p>
+                                <p class="text-gray-600 mb-6 leading-relaxed">${p.description}</p>
+                                
+                                <div class="mb-6">
+                                    <h4 class="font-semibold text-sm uppercase tracking-wider mb-2">Key Ingredients</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${p.ingredients.map(i => `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm">${i}</span>`).join('')}
+                                    </div>
+                                </div>
+
+                                <div class="mb-8">
+                                    <h4 class="font-semibold text-sm uppercase tracking-wider mb-2">Best For</h4>
+                                    <p class="text-gray-600 text-sm">${p.skinType.join(', ')} Skin</p>
+                                </div>
+
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="flex items-center border border-gray-300 rounded">
+                                        <button class="px-3 py-2 hover:bg-gray-100" onclick="this.nextElementSibling.value = Math.max(1, parseInt(this.nextElementSibling.value)-1)">-</button>
+                                        <input type="number" id="qty-${p.id}" value="1" min="1" class="w-12 text-center border-x border-gray-300 py-2 focus:outline-none">
+                                        <button class="px-3 py-2 hover:bg-gray-100" onclick="this.previousElementSibling.value = parseInt(this.previousElementSibling.value)+1">+</button>
+                                    </div>
+                                    <button onclick="store.addToCart(${p.id}, parseInt(document.getElementById('qty-${p.id}').value))" class="flex-1 bg-soft-black text-white py-3 rounded hover:bg-gold transition uppercase tracking-widest text-sm font-semibold">Add to Cart</button>
+                                </div>
+                                
+                                <div class="border-t pt-6 text-sm text-gray-500 space-y-2">
+                                    <p><i class="fas fa-truck mr-2 text-gold"></i> Free delivery on orders over ₨5,000</p>
+                                    <p><i class="fas fa-undo mr-2 text-gold"></i> 7-day easy return policy</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews Section -->
+                        <div class="mt-12 bg-white p-8 rounded-2xl shadow-sm">
+                            <h3 class="serif-font text-2xl font-bold mb-6">Customer Reviews</h3>
+                            <div class="space-y-6">
+                                ${p.reviews.map(r => `
+                                    <div class="border-b border-gray-100 pb-4">
+                                        <div class="flex items-center mb-2">
+                                            <div class="flex text-gold text-xs mr-2">${'<i class="fas fa-star"></i>'.repeat(r.rating)}</div>
+                                            <span class="font-semibold text-sm">${r.name}</span>
+                                            <span class="text-gray-400 text-xs ml-2">Verified Buyer</span>
+                                        </div>
+                                        <p class="text-gray-600 text-sm italic">"${r.text}"</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCart(container) {
+            const subtotal = store.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const delivery = subtotal > 5000 ? 0 : 250;
+            const total = subtotal + delivery;
+
+            if (store.cart.length === 0) {
+                container.innerHTML = `
+                    <div class="fade-in min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+                        <i class="fas fa-shopping-bag text-6xl text-gray-300 mb-6"></i>
+                        <h2 class="serif-font text-3xl font-bold text-soft-black mb-4">Your cart is empty</h2>
+                        <p class="text-gray-600 mb-8">Looks like you haven't added any serums to your cart yet.</p>
+                        <button onclick="router.navigate('shop')" class="bg-gold text-white px-8 py-3 rounded hover:bg-gold-dark transition uppercase tracking-widest text-sm font-semibold">Start Shopping</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="fade-in py-12 min-h-screen bg-soft-gray">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h1 class="serif-font text-4xl font-bold text-soft-black mb-8">Shopping Cart</h1>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div class="lg:col-span-2 space-y-4">
+                                ${store.cart.map(item => `
+                                    <div class="bg-white p-4 rounded-lg shadow-sm flex gap-4">
+                                        <img src="${item.image}" class="w-24 h-24 object-cover rounded bg-gray-100">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between mb-2">
+                                                <h3 class="serif-font font-semibold text-soft-black">${item.name}</h3>
+                                                <button onclick="store.removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                            <p class="text-gold font-bold mb-3">₨${item.price.toLocaleString()}</p>
+                                            <div class="flex items-center gap-4">
+                                                <div class="flex items-center border border-gray-300 rounded">
+                                                    <button class="px-3 py-1 hover:bg-gray-100" onclick="store.updateQty(${item.id}, ${item.qty - 1})">-</button>
+                                                    <span class="px-3 py-1 border-x border-gray-300 text-sm">${item.qty}</span>
+                                                    <button class="px-3 py-1 hover:bg-gray-100" onclick="store.updateQty(${item.id}, ${item.qty + 1})">+</button>
+                                                </div>
+                                                <span class="text-sm text-gray-500">Subtotal: ₨${(item.price * item.qty).toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="lg:col-span-1">
+                                <div class="bg-white p-6 rounded-lg shadow-sm sticky top-24">
+                                    <h3 class="serif-font text-xl font-bold mb-4">Order Summary</h3>
+                                    <div class="space-y-3 mb-6 text-sm">
+                                        <div class="flex justify-between"><span class="text-gray-600">Subtotal</span><span>₨${subtotal.toLocaleString()}</span></div>
+                                        <div class="flex justify-between"><span class="text-gray-600">Delivery Fee</span><span>${delivery === 0 ? '<span class="text-green-600">FREE</span>' : '₨' + delivery}</span></div>
+                                        <div class="border-t pt-3 flex justify-between font-bold text-lg text-soft-black"><span>Total</span><span>₨${total.toLocaleString()}</span></div>
+                                    </div>
+                                    <button onclick="router.navigate('checkout')" class="w-full bg-soft-black text-white py-3 rounded hover:bg-gold transition uppercase tracking-widest text-sm font-semibold mb-3">Proceed to Checkout</button>
+                                    <button onclick="router.navigate('shop')" class="w-full border border-gray-300 text-gray-700 py-3 rounded hover:border-soft-black transition uppercase tracking-widest text-sm font-semibold">Continue Shopping</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCheckout(container) {
+            if (store.cart.length === 0) return router.navigate('cart');
+            const subtotal = store.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const delivery = subtotal > 5000 ? 0 : 250;
+            const total = subtotal + delivery;
+
+            container.innerHTML = `
+                <div class="fade-in py-12 min-h-screen bg-soft-gray">
+                    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h1 class="serif-font text-4xl font-bold text-soft-black mb-8 text-center">Secure Checkout</h1>
+                        <form onsubmit="handleCheckout(event)" class="bg-white p-8 rounded-2xl shadow-sm">
+                            <h3 class="serif-font text-xl font-semibold mb-4 border-b pb-2">Contact Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <input type="text" name="fullName" required placeholder="Full Name" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold">
+                                <input type="tel" name="phone" required placeholder="Phone Number (e.g., 03XX XXXXXXX)" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold">
+                                <input type="email" name="email" required placeholder="Email Address" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold md:col-span-2">
+                            </div>
+
+                            <h3 class="serif-font text-xl font-semibold mb-4 border-b pb-2 mt-8">Delivery Address</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <input type="text" name="address" required placeholder="House/Street Address" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold md:col-span-2">
+                                <input type="text" name="city" required placeholder="City" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold">
+                                <select name="province" required class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold bg-white">
+                                    <option value="">Select Province</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Sindh">Sindh</option>
+                                    <option value="KPK">Khyber Pakhtunkhwa</option>
+                                    <option value="Balochistan">Balochistan</option>
+                                    <option value="Islamabad">Islamabad Capital Territory</option>
+                                </select>
+                                <input type="text" name="postalCode" required placeholder="Postal Code" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold">
+                                <input type="text" name="instructions" placeholder="Delivery Instructions (Optional)" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gold md:col-span-2">
+                            </div>
+
+                            <h3 class="serif-font text-xl font-semibold mb-4 border-b pb-2 mt-8">Payment Method</h3>
+                            <div class="space-y-3 mb-8">
+                                <label class="flex items-center p-4 border rounded cursor-pointer hover:border-gold transition has-[:checked]:border-gold has-[:checked]:bg-gold/5">
+                                    <input type="radio" name="payment" value="COD" checked class="mr-3 text-gold focus:ring-gold">
+                                    <div>
+                                        <span class="font-semibold block">Cash on Delivery (COD)</span>
+                                        <span class="text-sm text-gray-500">Pay when you receive your order</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center p-4 border rounded cursor-pointer hover:border-gold transition has-[:checked]:border-gold has-[:checked]:bg-gold/5">
+                                    <input type="radio" name="payment" value="JazzCash" class="mr-3 text-gold focus:ring-gold">
+                                    <div>
+                                        <span class="font-semibold block">JazzCash / EasyPaisa</span>
+                                        <span class="text-sm text-gray-500">You will be redirected to secure payment</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center p-4 border rounded cursor-pointer hover:border-gold transition has-[:checked]:border-gold has-[:checked]:bg-gold/5">
+                                    <input type="radio" name="payment" value="Card" class="mr-3 text-gold focus:ring-gold">
+                                    <div>
+                                        <span class="font-semibold block">Credit / Debit Card</span>
+                                        <span class="text-sm text-gray-500">Secure SSL encrypted transaction</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="bg-gray-50 p-6 rounded mb-6">
+                                <div class="flex justify-between mb-2"><span class="text-gray-600">Subtotal</span><span>₨${subtotal.toLocaleString()}</span></div>
+                                <div class="flex justify-between mb-2"><span class="text-gray-600">Delivery</span><span>${delivery === 0 ? 'FREE' : '₨' + delivery}</span></div>
+                                <div class="flex justify-between font-bold text-xl text-soft-black mt-4 pt-4 border-t"><span>Total</span><span>₨${total.toLocaleString()}</span></div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gold text-white py-4 rounded hover:bg-gold-dark transition uppercase tracking-widest font-bold text-lg shadow-lg">Place Order</button>
+                            <p class="text-center text-xs text-gray-500 mt-4"><i class="fas fa-lock mr-1"></i> Your information is secure and encrypted.</p>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleCheckout(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const orderData = {
+                customer: {
+                    name: formData.get('fullName'),
+                    phone: formData.get('phone'),
+                    email: formData.get('email'),
+                    address: formData.get('address'),
+                    city: formData.get('city'),
+                    province: formData.get('province'),
+                    postalCode: formData.get('postalCode'),
+                    instructions: formData.get('instructions')
+                },
+                paymentMethod: formData.get('payment'),
+                subtotal: store.cart.reduce((sum, item) => sum + (item.price * item.qty), 0),
+                delivery: store.cart.reduce((sum, item) => sum + (item.price * item.qty), 0) > 5000 ? 0 : 250
+            };
+            
+            // Simulate processing
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = 'Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const orderId = store.placeOrder(orderData);
+                router.navigate('confirmation', {id: orderId});
+            }, 1500);
+        }
+
+        function renderConfirmation(container, orderId) {
+            const order = store.orders.find(o => o.id === orderId);
+            if (!order) return router.navigate('home');
+
+            container.innerHTML = `
+                <div class="fade-in min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-12">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-check text-4xl text-green-600"></i>
+                    </div>
+                    <h1 class="serif-font text-4xl font-bold text-soft-black mb-2">Thank you for your order!</h1>
+                    <p class="text-gray-600 mb-8">Your order has been successfully placed.</p>
+                    
+                    <div class="bg-white p-8 rounded-2xl shadow-sm max-w-md w-full text-left mb-8">
+                        <div class="flex justify-between mb-4 border-b pb-4">
+                            <span class="text-gray-500">Order Number</span>
+                            <span class="font-bold text-gold">${order.id}</span>
+                        </div>
+                        <div class="flex justify-between mb-4 border-b pb-4">
+                            <span class="text-gray-500">Total Amount</span>
+                            <span class="font-bold">₨${(order.subtotal + order.delivery).toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between mb-4 border-b pb-4">
+                            <span class="text-gray-500">Payment Method</span>
+                            <span class="font-semibold">${order.paymentMethod === 'COD' ? 'Cash on Delivery' : order.paymentMethod}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Status</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold uppercase">Pending</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="router.navigate('track')" class="bg-soft-black text-white px-8 py-3 rounded hover:bg-gold transition uppercase tracking-widest text-sm font-semibold">Track Order</button>
+                        <button onclick="router.navigate('shop')" class="border border-soft-black text-soft-black px-8 py-3 rounded hover:bg-soft-black hover:text-white transition uppercase tracking-widest text-sm font-semibold">Continue Shopping</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTrack(container) {
+            container.innerHTML = `
+                <div class="fade-in py-12 min-h-screen bg-soft-gray">
+                    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h1 class="serif-font text-4xl font-bold text-soft-black mb-8 text-center">Track Your Order</h1>
+                        
+                        <div class="bg-white p-6 rounded-2xl shadow-sm mb-8">
+                            <div class="flex gap-2">
+                                <input type="text" id="track-input" placeholder="Enter Order ID (e.g., AUR-123456)" class="flex-1 border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-gold uppercase">
+                                <button onclick="trackOrder()" class="bg-gold text-white px-6 py-3 rounded hover:bg-gold-dark transition font-semibold">Track</button>
+                            </div>
+                        </div>
+
+                        <div id="track-result" class="hidden bg-white p-8 rounded-2xl shadow-sm">
+                            <!-- Result injected here -->
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function trackOrder() {
+            const id = document.getElementById('track-input').value.trim().toUpperCase();
+            const order = store.orders.find(o => o.id === id);
+            const resultDiv = document.getElementById('track-result');
+            
+            if (!order) {
+                resultDiv.classList.remove('hidden');
+                resultDiv.innerHTML = `<p class="text-red-500 text-center">Order not found. Please check the Order ID.</p>`;
+                return;
+            }
+
+            const statuses = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered'];
+            const currentIdx = statuses.indexOf(order.status);
+
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = `
+                <div class="mb-6 border-b pb-4">
+                    <h3 class="serif-font text-2xl font-bold mb-2">Order ${order.id}</h3>
+                    <p class="text-gray-500 text-sm">Placed on ${order.date} | Total: ₨${(order.subtotal + order.delivery).toLocaleString()}</p>
+                </div>
+                <div class="relative pl-8 space-y-8">
+                    <div class="timeline-line"></div>
+                    ${statuses.map((status, idx) => {
+                        const isActive = idx <= currentIdx;
+                        const isCurrent = idx === currentIdx;
+                        return `
+                            <div class="relative flex items-start">
+                                <div class="absolute -left-8 mt-1 w-4 h-4 rounded-full border-2 ${isActive ? 'bg-gold border-gold' : 'bg-white border-gray-300'} z-10"></div>
+                                <div>
+                                    <h4 class="font-semibold ${isActive ? 'text-soft-black' : 'text-gray-400'}">${status}</h4>
+                                    ${isCurrent ? `<p class="text-sm text-gold mt-1">Current Status</p>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="mt-8 pt-6 border-t">
+                    <h4 class="font-semibold mb-2">Items:</h4>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        ${order.items.map(i => `<li>${i.qty}x ${i.name}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        function renderAbout(container) {
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="relative h-[60vh] flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=1920" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/40"></div>
+                        <h1 class="relative serif-font text-5xl md:text-6xl font-bold text-white text-center">About Aurevél</h1>
+                    </div>
+                    <div class="max-w-4xl mx-auto px-4 py-16 text-center">
+                        <h2 class="serif-font text-3xl font-bold text-soft-black mb-6">The Philosophy of Radiance</h2>
+                        <p class="text-gray-600 leading-relaxed mb-8 text-lg">
+                            Aurevél was born from a simple belief: skincare should be a moment of luxury, not a chore. We craft premium, elegant serum formulas that blend high-performance cosmetic ingredients with sensory-rich textures. 
+                        </p>
+                        <p class="text-gray-600 leading-relaxed mb-8 text-lg">
+                            Every bottle is designed to become a beautiful part of your everyday ritual, helping you reveal your natural radiance without compromising on safety or quality. We are proud to serve the women of Pakistan with products that deliver visible, healthy-looking results.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                            <div class="p-6 bg-soft-gray rounded-lg">
+                                <i class="fas fa-seedling text-3xl text-gold mb-4"></i>
+                                <h3 class="font-semibold mb-2">Ethically Sourced</h3>
+                                <p class="text-sm text-gray-500">Ingredients chosen for their efficacy and environmental responsibility.</p>
+                            </div>
+                            <div class="p-6 bg-soft-gray rounded-lg">
+                                <i class="fas fa-flask text-3xl text-gold mb-4"></i>
+                                <h3 class="font-semibold mb-2">Dermatologically Tested</h3>
+                                <p class="text-sm text-gray-500">Formulas tested for safety and cosmetic performance.</p>
+                            </div>
+                            <div class="p-6 bg-soft-gray rounded-lg">
+                                <i class="fas fa-heart text-3xl text-gold mb-4"></i>
+                                <h3 class="font-semibold mb-2">Cruelty Free</h3>
+                                <p class="text-sm text-gray-500">Never tested on animals, always kind to your skin.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderIngredients(container) {
+            container.innerHTML = `
+                <div class="fade-in py-16 min-h-screen bg-soft-gray">
+                    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-16">
+                            <h1 class="serif-font text-4xl font-bold text-soft-black mb-4">Our Key Ingredients</h1>
+                            <p class="text-gray-600 max-w-2xl mx-auto">We believe in transparency. Here are the powerhouse cosmetic ingredients that make our serums effective.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            ${[
+                                {name: "Vitamin C (L-Ascorbic Acid)", desc: "A powerful antioxidant that helps brighten the skin's appearance, fade dark spots, and protect against environmental stressors for a radiant glow."},
+                                {name: "Hyaluronic Acid", desc: "A moisture-binding molecule that can hold up to 1000x its weight in water, providing intense hydration and plumping the appearance of fine lines."},
+                                {name: "Niacinamide (Vitamin B3)", desc: "A versatile ingredient that helps regulate sebum production, minimize the appearance of pores, and improve uneven skin tone."},
+                                {name: "Peptides", desc: "Short chains of amino acids that signal the skin to support collagen production, helping to improve firmness and elasticity over time."},
+                                {name: "Botanical Extracts", desc: "Natural plant-derived ingredients like Rosehip, Green Tea, and Aloe Vera that soothe, nourish, and provide antioxidant benefits to the skin."}
+                            ].map(ing => `
+                                <div class="bg-white p-8 rounded-xl shadow-sm border-l-4 border-gold">
+                                    <h3 class="serif-font text-2xl font-bold text-soft-black mb-3">${ing.name}</h3>
+                                    <p class="text-gray-600 leading-relaxed">${ing.desc}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <p class="text-center text-xs text-gray-400 mt-12 max-w-3xl mx-auto">
+                            *These statements have not been evaluated by medical authorities. Our products are cosmetic and are not intended to diagnose, treat, cure, or prevent any disease. For medical skin conditions, please consult a dermatologist.
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderContact(container) {
+            container.innerHTML = `
+                <div class="fade-in py-16 min-h-screen bg-soft-gray">
+                    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-12">
+                            <h1 class="serif-font text-4xl font-bold text-soft-black mb-4">Contact Us</h1>
+                            <p class="text-gray-600">We're here to help with your skincare journey.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-8 md:p-12 rounded-2xl shadow-sm">
+                            <div>
+                                <h3 class="serif-font text-2xl font-bold mb-6">Get in Touch</h3>
+                                <div class="space-y-6">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold flex-shrink-0"><i class="fas fa-envelope"></i></div>
+                                        <div>
+                                            <h4 class="font-semibold">Email</h4>
+                                            <p class="text-gray-600 text-sm">support@aurevel.com</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold flex-shrink-0"><i class="fas fa-phone"></i></div>
+                                        <div>
+                                            <h4 class="font-semibold">Phone / WhatsApp</h4>
+                                            <p class="text-gray-600 text-sm">+92 300 1234567</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold flex-shrink-0"><i class="fas fa-map-marker-alt"></i></div>
+                                        <div>
+                                            <h4 class="font-semibold">Address</h4>
+                                            <p class="text-gray-600 text-sm">Lahore, Punjab, Pakistan</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-8">
+                                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                                    <div class="flex gap-4">
+                                        <a href="#" class="w-10 h-10 bg-soft-black text-white rounded-full flex items-center justify-center hover:bg-gold transition"><i class="fab fa-instagram"></i></a>
+                                        <a href="#" class="w-10 h-10 bg-soft-black text-white rounded-full flex items-center justify-center hover:bg-gold transition"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#" class="w-10 h-10 bg-soft-black text-white rounded-full flex items-center justify-center hover:bg-gold transition"><i class="fab fa-whatsapp"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <form onsubmit="event.preventDefault(); showToast('Message sent successfully! We will reply shortly.');" class="space-y-4">
+                                <input type="text" placeholder="Your Name" required class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-gold">
+                                <input type="email" placeholder="Your Email" required class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-gold">
+                                <input type="tel" placeholder="Phone Number" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-gold">
+                                <textarea rows="4" placeholder="Your Message" required class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-gold"></textarea>
+                                <button type="submit" class="w-full bg-soft-black text-white py-3 rounded hover:bg-gold transition uppercase tracking-widest text-sm font-semibold">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // QUIZ LOGIC
+        // ==========================================
+        let quizStep = 1;
+        let quizAnswers = {};
+
+        function openQuiz() {
+            quizStep = 1;
+            quizAnswers = {};
+            document.getElementById('quiz-modal').classList.remove('hidden');
+            renderQuizStep();
+        }
+
+        function closeQuiz() {
+            document.getElementById('quiz-modal').classList.add('hidden');
+        }
+
+        function renderQuizStep() {
+            const content = document.getElementById('quiz-content');
+            if (quizStep === 1) {
+                content.innerHTML = `
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🧴</div>
+                        <h4 class="serif-font text-2xl font-bold mb-2">What is your skin type?</h4>
+                        <p class="text-gray-500 text-sm">This helps us recommend the right texture.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        ${['Dry', 'Oily', 'Combination', 'Normal', 'Sensitive'].map(type => `
+                            <button onclick="nextQuizStep(1, '${type}')" class="p-4 border border-gray-200 rounded-lg hover:border-gold hover:bg-gold/5 transition text-left font-medium">${type}</button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (quizStep === 2) {
+                content.innerHTML = `
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">✨</div>
+                        <h4 class="serif-font text-2xl font-bold mb-2">What is your main skincare goal?</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        ${['Hydration', 'Glow', 'Brightening', 'Balance', 'Renewal'].map(goal => `
+                            <button onclick="nextQuizStep(2, '${goal}')" class="p-4 border border-gray-200 rounded-lg hover:border-gold hover:bg-gold/5 transition text-left font-medium">${goal}</button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (quizStep === 3) {
+                content.innerHTML = `
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">💧</div>
+                        <h4 class="serif-font text-2xl font-bold mb-2">What texture do you prefer?</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        ${['Lightweight & Fast-absorbing', 'Rich & Nourishing', 'Silky & Smooth'].map(tex => `
+                            <button onclick="nextQuizStep(3, '${tex}')" class="p-4 border border-gray-200 rounded-lg hover:border-gold hover:bg-gold/5 transition text-left font-medium">${tex}</button>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                // Calculate result
+                let recommended = products[0]; // Default
+                if (quizAnswers.goal === 'Hydration' || quizAnswers.type === 'Dry') recommended = products.find(p => p.id === 3) || products[0];
+                else if (quizAnswers.goal === 'Brightening') recommended = products.find(p => p.id === 2) || products[0];
+                else if (quizAnswers.goal === 'Balance' || quizAnswers.type === 'Oily') recommended = products.find(p => p.id === 5) || products[0];
+                else if (quizAnswers.goal === 'Renewal') recommended = products.find(p => p.id === 4) || products[0];
+                else recommended = products.find(p => p.id === 1) || products[0];
+
+                content.innerHTML = `
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🎉</div>
+                        <h4 class="serif-font text-2xl font-bold mb-2">Your Aurevél Match</h4>
+                        <p class="text-gray-500 text-sm mb-6">Based on your answers, we recommend:</p>
+                    </div>
+                    <div class="bg-soft-gray p-6 rounded-xl border border-gold/20">
+                        <div class="flex flex-col sm:flex-row gap-6 items-center">
+                            <img src="${recommended.image}" class="w-32 h-32 object-cover rounded-lg bg-white">
+                            <div class="text-center sm:text-left flex-1">
+                                <h5 class="serif-font text-xl font-bold mb-1">${recommended.name}</h5>
+                                <p class="text-gold font-bold mb-2">₨${recommended.price.toLocaleString()}</p>
+                                <p class="text-sm text-gray-600 mb-4">${recommended.description}</p>
+                                <div class="flex flex-col sm:flex-row gap-3 justify-center sm:justify-start">
+                                    <button onclick="closeQuiz(); router.navigate('product', {id: ${recommended.id}})" class="px-6 py-2 border border-soft-black rounded hover:bg-soft-black hover:text-white transition text-sm font-semibold">View Product</button>
+                                    <button onclick="closeQuiz(); store.addToCart(${recommended.id})" class="px-6 py-2 bg-gold text-white rounded hover:bg-gold-dark transition text-sm font-semibold">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 text-center mt-6">This is general cosmetic guidance. For medical skin conditions, please consult a dermatologist.</p>
+                `;
+            }
+        }
+
+        function nextQuizStep(step, answer) {
+            if (step === 1) quizAnswers.type = answer;
+            if (step === 2) quizAnswers.goal = answer;
+            if (step === 3) quizAnswers.texture = answer;
+            quizStep++;
+            renderQuizStep();
+        }
+
+        // ==========================================
+        // CHATBOT LOGIC (AURI)
+        // ==========================================
+        let chatOpen = false;
+        
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            const win = document.getElementById('chat-window');
+            if (chatOpen) {
+                win.classList.remove('hidden');
+                if (document.getElementById('chat-messages').children.length === 0) {
+                    initChat();
+                }
+            } else {
+                win.classList.add('hidden');
+            }
+        }
+
+        function initChat() {
+            addBotMessage("Hi! I'm Auri ✨, your Aurevél Beauty Assistant. I can help you discover your serum, shop products, check your order, and answer your skincare questions. How can I help you today?");
+            showQuickReplies([
+                "🧴 Find My Serum",
+                "🛍️ Shop Products",
+                "🛒 My Cart",
+                "📦 Track Order",
+                "🚚 Delivery Info",
+                "💬 Skincare Help"
+            ]);
+        }
+
+        function addBotMessage(text, html = null) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'flex items-start gap-2 chat-message';
+            div.innerHTML = `
+                <div class="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">✨</div>
+                <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none p-3 shadow-sm max-w-[80%] text-sm text-gray-700">
+                    ${html || text}
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'flex items-end justify-end gap-2 chat-message';
+            div.innerHTML = `
+                <div class="bg-gold text-white rounded-2xl rounded-tr-none p-3 shadow-sm max-w-[80%] text-sm">
+                    ${text}
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showQuickReplies(replies) {
+            const container = document.getElementById('quick-replies');
+            container.innerHTML = replies.map(r => `
+                <button onclick="handleQuickReply('${r}')" class="text-xs bg-white border border-gold text-gold px-3 py-1 rounded-full hover:bg-gold hover:text-white transition whitespace-nowrap">${r}</button>
+            `).join('');
+        }
+
+        function handleQuickReply(text) {
+            document.getElementById('chat-input').value = text;
+            sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            addUserMessage(text);
+            input.value = '';
+            document.getElementById('quick-replies').innerHTML = '';
+
+            // Simulate typing
+            const container = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'flex items-start gap-2 chat-message';
+            typingDiv.innerHTML = `
+                <div class="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">✨</div>
+                <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none p-3 shadow-sm flex gap-1">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+
+            setTimeout(() => {
+                typingDiv.remove();
+                processAuriResponse(text);
+            }, 1000);
+        }
+
+        function processAuriResponse(input) {
+            const lower = input.toLowerCase();
+            
+            if (lower.includes('find my serum') || lower.includes('quiz')) {
+                addBotMessage("Let's find your perfect match! I'll ask you 3 quick questions.");
+                setTimeout(() => {
+                    toggleChat();
+                    openQuiz();
+                }, 1000);
+                return;
+            }
+            
+            if (lower.includes('shop') || lower.includes('products')) {
+                addBotMessage("Here are our bestselling serums. Click 'View' to see details or 'Add' to put them in your cart!");
+                let html = '<div class="space-y-3 mt-2">';
+                products.slice(0, 3).forEach(p => {
+                    html += `
+                        <div class="flex gap-3 bg-soft-gray p-2 rounded border border-gray-100">
+                            <img src="${p.image}" class="w-16 h-16 object-cover rounded bg-white">
+                            <div class="flex-1">
+                                <h5 class="font-semibold text-xs mb-1">${p.name}</h5>
+                                <p class="text-gold font-bold text-xs mb-2">₨${p.price.toLocaleString()}</p>
+                                <div class="flex gap-2">
+                                    <button onclick="router.navigate('product', {id: ${p.id}}); toggleChat();" class="text-[10px] bg-white border border-gray-300 px-2 py-1 rounded hover:border-gold">View</button>
+                                    <button onclick="store.addToCart(${p.id}); addBotMessage('Added ${p.name} to your cart! ✨ Would you like to checkout?');" class="text-[10px] bg-gold text-white px-2 py-1 rounded hover:bg-gold-dark">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                addBotMessage("", html);
+                showQuickReplies(["🛒 View My Cart", "💬 Skincare Help"]);
+                return;
+            }
+
+            if (lower.includes('cart')) {
+                if (store.cart.length === 0) {
+                    addBotMessage("Your cart is currently empty. Would you like me to recommend some products?");
+                    showQuickReplies(["🛍️ Shop Products", "🧴 Find My Serum"]);
+                } else {
+                    const total = store.cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+                    let html = '<div class="space-y-2">';
+                    store.cart.forEach(i => {
+                        html += `<div class="flex justify-between text-xs"><span>${i.qty}x ${i.name}</span><span>₨${(i.price * i.qty).toLocaleString()}</span></div>`;
+                    });
+                    html += `<div class="border-t pt-2 mt-2 font-bold flex justify-between"><span>Total</span><span>₨${total.toLocaleString()}</span></div>`;
+                    html += `<button onclick="router.navigate('checkout'); toggleChat();" class="w-full bg-gold text-white text-xs py-2 rounded mt-2">Proceed to Checkout</button>`;
+                    html += '</div>';
+                    addBotMessage("Here's what's in your cart:", html);
+                }
+                return;
+            }
+
+            if (lower.includes('track') || lower.includes('order')) {
+                addBotMessage("You can track your order using your Order ID (e.g., AUR-123456).");
+                setTimeout(() => {
+                    toggleChat();
+                    router.navigate('track');
+                }, 1000);
+                return;
+            }
+
+            if (lower.includes('delivery') || lower.includes('shipping')) {
+                addBotMessage("We deliver all across Pakistan! 🚚<br><br>• Standard Delivery: 3-5 working days<br>• Delivery Fee: ₨250 (FREE on orders over ₨5,000)<br><br>Would you like to place an order?");
+                showQuickReplies(["🛍️ Shop Products", "🛒 My Cart"]);
+                return;
+            }
+
+            if (lower.includes('payment') || lower.includes('cod') || lower.includes('jazzcash')) {
+                addBotMessage("We offer secure payment options:<br>• 💵 Cash on Delivery (COD)<br>• 📱 JazzCash / EasyPaisa<br>• 💳 Credit/Debit Card<br>• 🏦 Bank Transfer<br><br>All online payments are processed securely. We never store your card details.");
+                return;
+            }
+
+            if (lower.includes('return') || lower.includes('refund')) {
+                addBotMessage("We offer a 7-day easy return policy for unopened products. If your product arrives damaged, please contact our support team immediately with your Order ID and photos.");
+                showQuickReplies(["👩‍💼 Contact Support"]);
+                return;
+            }
+
+            if (lower.includes('ingredient') || lower.includes('vitamin c') || lower.includes('hyaluronic')) {
+                addBotMessage("Our key ingredients include:<br>• <b>Vitamin C:</b> Brightens and protects<br>• <b>Hyaluronic Acid:</b> Deep hydration<br>• <b>Niacinamide:</b> Balances oil and minimizes pores<br>• <b>Peptides:</b> Supports firmness<br><br>Would you like to know which serum has a specific ingredient?");
+                return;
+            }
+
+            if (lower.includes('contact') || lower.includes('support') || lower.includes('human')) {
+                addBotMessage("I can connect you with our human support team.<br><br>📧 support@aurevel.com<br>📞 +92 300 1234567<br><br>Or you can use the Contact form on our website.");
+                setTimeout(() => {
+                    toggleChat();
+                    router.navigate('contact');
+                }, 2000);
+                return;
+            }
+
+            // Add to cart intent
+            const addToCartMatch = input.match(/add.*cart.*(.+)/i) || input.match(/buy.*(.+)/i);
+            if (addToCartMatch || lower.includes('want') || lower.includes('buy')) {
+                const product = products.find(p => lower.includes(p.name.toLowerCase()) || lower.includes(p.name.split(' ').slice(-2).join(' ').toLowerCase()));
+                if (product) {
+                    store.addToCart(product.id);
+                    addBotMessage(`Great choice! ✨ <b>${product.name}</b> has been added to your cart.`);
+                    showQuickReplies(["🛒 View Cart", "🛍️ Continue Shopping"]);
+                } else {
+                    addBotMessage("I'd love to help you add that to your cart! Could you please specify which serum you're interested in?");
+                    showQuickReplies(["🛍️ Show All Products"]);
+                }
+                return;
+            }
+
+            // Default fallback
+            addBotMessage("I don't have verified information about that yet. Please contact Aurevél Customer Support for detailed assistance, or ask me about our products, delivery, or returns!");
+            showQuickReplies(["👩‍💼 Contact Support", "🛍️ Shop Products"]);
+        }
+
+        // ==========================================
+        // UTILITIES
+        // ==========================================
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            router.navigate('home');
+        });
+
+    </script>
+</body>
+</html>
